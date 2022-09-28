@@ -6,6 +6,7 @@ Created on Fri Sep  2 10:12:28 2022
 """
 
 # mm1 queue
+#%%
 
 import simpy
 import random
@@ -69,11 +70,13 @@ print(averageWaitTime)
 print(f'The average wait time is {np.average(averageWaitTime):0.3}')
 
 plt.figure()
-#plt.plot(averageWaitTime)
+plt.plot(averageWaitTime)
 plt.bar(range(len(averageWaitTime)), averageWaitTime)
+plt.show()
 
 plt.figure()
 plt.hist(averageWaitTime, bins=20)
 plt.xlabel('average wait time')
 plt.ylabel('frequency')
 plt.title('expereimental results')
+plt.show()
