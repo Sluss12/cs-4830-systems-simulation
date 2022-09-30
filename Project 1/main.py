@@ -13,23 +13,14 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-class Customer:
-    def __init__(self, number, env, cashier):
-        self.custNo = number
-        self.env = env
-        self.cashier = cashier
-    
-    
-    def getInLine(self):
-        arrivalTime = self.env.now()
-        
 
-def customerGenerator(env, cashier):
-    custNo = 0
-    while True:
-        cust = Customer(custNo, env, cashier)
-        env.process(cust.getInLine())
-        custNo += 1
-        yield env.timeout(random.expovariate(1/6.0))
+def startDriveThru(env):
+    print(f'Simulation time is {env.now:7.3f}')
+    yield env.timeout(2.0)
+    print(f'Simulation time is {env.now:7.3f}')
+
+env = simpy.Environment()
+env.procress(startDriveThru(env))
+env.run()
 
 # Watching Lecture on 9/2/22 at timestamp 33:29
