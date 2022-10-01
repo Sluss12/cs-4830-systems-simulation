@@ -15,12 +15,16 @@ import matplotlib.pyplot as plt
 
 
 def startDriveThru(env):
-    print(f'Simulation time is {env.now:7.3f}')
-    yield env.timeout(2.0)
-    print(f'Simulation time is {env.now:7.3f}')
+    custCount = 0
+    for custCount in range(10):
+        print(f'Customer {custCount} has arrived at simTime {env.now:.2f}')
+        yield env.timeout(2.0)
+        print(f'Customer {custCount} finished placing their order at simTime {env.now:.2f}')
+        custCount += 1
+
 
 env = simpy.Environment()
-env.procress(startDriveThru(env))
-env.run()
+env.process(startDriveThru(env))
+env.run() 
 
 # Watching Lecture on 9/2/22 at timestamp 33:29
