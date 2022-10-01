@@ -38,20 +38,20 @@ class Customer:
         self.timeOfFoodReady = 0
         self.remainingPrepTime = 0
 
-    def printOrderSummary(self):
+    def print_OrderSummary(self):
         print(f'Customer Number: {self.customerNo}')
         print(f'Line Number: {self.lineNo}')
+        print(f'Time of Arrival: {self.timeOfArrival:.3f}')
         print(f'Time of Order: {self.timeOfOrder:.3f}')
         print(f'Time to Order: {self.timeToOrder:.3f}')
         print(f'Prep Time: {self.timeToPrepFood:.3f}')
         print(f'Remaining Prep Time: {self.remainingPrepTime:.3f}')
         print(f'Time of Payment: {self.timeOfPayment:.3f}')
         print(f'Time to Pay: {self.timeToPay:.3f}')
-        print(f'Wait Time: {self.customerNo}')
+        print(f'Wait Time: {self.timeOfPayment-self.timeOfArrival}')
         
     def inLine(self):
         self.timeOfArrival = self.env.now
-        print(f'Customer {self.customerNo} has arrived at simTime {self.env.now:.3f}')
         #pick line
         # if either line is below capacity, get in that line
         if self.line[0].count < self.line[0].capacity or self.line[1].count < self.line[1].capacity:
@@ -61,8 +61,6 @@ class Customer:
                 self.lineNo = 1
         else:  # bawk
             self.lineNo = 2
-        print_stats(self.line[self.lineNo], self.customerNo)
-        print(f'Customer {self.customerNo} picked line {self.lineNo}')
         if self.lineNo != 2:
             #get in line
             getInLine = self.line[self.lineNo].request()
@@ -71,28 +69,24 @@ class Customer:
             getToOrderStation = self.orderStations[self.lineNo].request()
             yield getToOrderStation
             yield self.line[self.lineNo].release(getInLine)
-            print(f'Customer {self.customerNo} got to orderStation {self.lineNo} at simTime {self.env.now:.3f}')
             yield self.env.timeout(self.timeToOrder)
             yield self.orderStations[self.lineNo].release(getToOrderStation)
             self.timeOfOrder = self.env.now
-            print(f'Customer {self.customerNo} finished at orderStation {self.lineNo} at simTime {self.env.now:.3f}. With an order time of {self.timeToOrder:.3f}, thier food will take {self.timeToPrepFood:.3f} minutes')
             #pickup line
             getInPickupLine = self.pickupLine.request()
             yield getInPickupLine
             #pickup and pay
-            print_stats(self.pickupLine,self.customerNo)
             getToPickupWindow = self.pickupWindow.request()
             yield getToPickupWindow
             yield self.pickupLine.release(getInPickupLine)
-            print(f'Customer {self.customerNo} got to pickupWindow at simTime {self.env.now:.3f}')
             self.remainingPrepTime = self.timeToPrepFood-(self.env.now - self.timeOfOrder)
-            print(f'Remaining Prep Time: {self.remainingPrepTime:.3f}')
             if self.remainingPrepTime > 0.0:
                 yield self.env.timeout(self.remainingPrepTime)
-            print(f'Customer {self.customerNo} food is ready at simTime {self.env.now:.3f}')
+            self.timeOfPayment = self.env.now
             yield self.env.timeout(self.timeToPay)
             yield self.pickupWindow.release(getToPickupWindow)
-            print(f'Customer {self.customerNo} finished paying, got food, and left at simTime {self.env.now:.3f}')
+            #print(f'Customer {self.customerNo} finished paying, got food, and left at simTime {self.env.now:.3f}')
+            self.print_OrderSummary()
         else:
             print(f'Customer {self.customerNo} has BAWKED on arrival simTime {self.env.now:.3f}')
             
