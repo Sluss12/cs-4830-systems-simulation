@@ -146,7 +146,7 @@ print(f'The average total time taken over {runs} runs is {np.average(averageTota
 print(f'The average number of customers to bawk over {runs} runs is {np.average(averageLostCustomers):0.3f}')
 
 plt.figure()
-plt.hist(averageLostCustomers, bins=10)
+plt.hist(averageLostCustomers, bins=20)
 plt.xlabel('average number of customers lost')
 plt.ylabel('frequency')
 plt.title(f'Customers Lost Over {runs} Runs')
