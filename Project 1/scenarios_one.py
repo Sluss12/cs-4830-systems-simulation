@@ -24,9 +24,9 @@ class Customer:
         self.orderStations = orderStations
         self.pickupLine = pickupLine
         self.pickupWindow = pickupWindow
-        self.timeToOrder = 2 #random.expovariate(1/2.5)
-        self.timeToPrepFood = 1#random.expovariate(1/5.0)
-        self.timeToPay = 2#random.expovariate(1/2.0)
+        self.timeToOrder = random.expovariate(1/2.5)
+        self.timeToPrepFood = random.expovariate(1/5.0)
+        self.timeToPay = random.expovariate(1/2.0)
         self.lineNo = 0
         # For Use in Stats
         self.bawk = False
@@ -106,7 +106,7 @@ class Customer:
 def customerGenerator(env, orderStations, pickupLine, pickupWindow):
     customerNo = 1
     while True:
-        interarrivalRate = .5#random.expovariate(1/meanInterArrivalTime) #time delay between cust
+        interarrivalRate = random.expovariate(1/meanInterArrivalTime) #time delay between cust
         yield env.timeout(interarrivalRate)  
         customer = Customer(customerNo, env, orderStations, pickupLine, pickupWindow)
         env.process(customer.inLine())
