@@ -117,7 +117,8 @@ meanInterArrivalTime = 2.0
 averageTotalTimeTaken = []
 averageLostCustomers = []
 averageCustomersProcessed = []
-for replicate in range(1):
+runs = 1000
+for replicate in range(runs):
     totalTimeTakenList = []
     lostCustomerList = []
     noCustomersProccessedList = []
@@ -132,17 +133,16 @@ for replicate in range(1):
     averageCustomersProcessed.append(np.sum(noCustomersProccessedList)-np.sum(lostCustomerList))
     
 print(f'The mean interarrival time of customers is: {meanInterArrivalTime}')
-print(f'The drive-thru simulation ran for 120 time units, to simulate the lunch rush from 11:00am to 1:00pm.')
-print(
-    f'The average number of customers processed in 120 time units over 10000 runs is {np.average(averageCustomersProcessed):0.3f} or {np.average(averageCustomersProcessed) / 2:0.3f}')
-print(f'The average total time taken over 10000 runs is {np.average(averageTotalTimeTaken):0.3f}')
-print(f'The average number of customers to bawk over 10000 runs is {np.average(averageLostCustomers):0.3f}')
+print(f'The drive-thru simulation ran {runs} times for 120 time units, to simulate the lunch rush from 11:00am to 1:00pm.')
+print(f'The average number of customers processed in 120 time units over {runs} runs is {np.average(averageCustomersProcessed):0.3f} or {np.average(averageCustomersProcessed) / 2:0.3f}')
+print(f'The average total time taken over {runs} runs is {np.average(averageTotalTimeTaken):0.3f}')
+print(f'The average number of customers to bawk over {runs} runs is {np.average(averageLostCustomers):0.3f}')
 
 plt.figure()
 plt.hist(averageLostCustomers, bins=10)
 plt.xlabel('average number of customers lost')
 plt.ylabel('frequency')
-plt.title('Customers Lost over 100 Runs')
-#plt.show()
+plt.title(f'Customers Lost Over {runs} Runs')
+plt.show()
 
 # %%
