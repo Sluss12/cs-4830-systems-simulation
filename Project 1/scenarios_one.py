@@ -62,10 +62,8 @@ class Customer:
     
     def inLine(self):
         self.timeOfArrival = self.env.now
-        print(f'Customer {self.customerNo} has arrived at: {self.env.now:.3f}')
         #check if line is full
         if (len(self.orderStations[0].queue) + len(self.orderStations[1].queue)) >= 12:
-            print(f'Customer {self.customerNo} HAS BAWKED ON ARRIVAL at simTime {self.env.now:.3f}')
             lostCustomerList.append(1.0)
             return
         #pick line
@@ -80,42 +78,27 @@ class Customer:
         self.peopleInOrderLineOnArrival = len(self.orderStations[self.lineNo].queue) + self.orderStations[self.lineNo].count
         #get to order station
         getToOrderStation = self.orderStations[self.lineNo].request() #get in line
-        print(f'Customer {self.customerNo} got in line {self.lineNo} at: {self.env.now:.3f}')
-        print(f'  Length of Order Station {self.lineNo} Queue: {len(self.orderStations[self.lineNo].queue)}')
         yield getToOrderStation
-        print(f'Customer {self.customerNo} got to ORDERSTATION {self.lineNo} at: {self.env.now:.3f}')
         yield self.env.timeout(self.timeToOrder)
         self.timeOfOrder = self.env.now
-        print(f'Customer {self.customerNo} ordered food at: {self.env.now:.3f}')
         self.timeOfFoodReady = self.timeOfOrder + self.timeToPrepFood
-        print(f'Customer {self.customerNo} food will be ready at {self.timeOfFoodReady:.3f}')
         #get in pickup line
         self.peopleInPickupLineAfterOrdering = self.pickupLine.count
         self.peopleWaitingForPickupLine = len(self.pickupLine.queue)
         getInPickupLine = self.pickupLine.request()
-        print(f'Customer {self.customerNo} is waiting for the pickup line at: {self.env.now:.3f}')
-        print(f'  Number of people already in the pickup line: {self.peopleInPickupLineAfterOrdering}')
-        print(f'  Number of people waiting for pickup line: {len(self.pickupLine.queue)}')
         yield getInPickupLine
         yield self.orderStations[self.lineNo].release(getToOrderStation) #once there is space in the pickup, leave the order station
-        print(f'Customer {self.customerNo} got in the pickup line at: {self.env.now:.3f}')
         #get to pickup window then wait for food to finish
         getToPickupWindow = self.pickupWindow.request()
         yield getToPickupWindow
         yield self.pickupLine.release(getInPickupLine) #once there is space at the checkout window, leave the pickup line
-        print(f'Customer {self.customerNo} got out of the pickup line and to the window at: {self.env.now:.3f}')
         self.remainingPrepTime = self.timeToPrepFood-(self.env.now - self.timeOfOrder)
         if self.remainingPrepTime > 0.0:
-            print(f'Customer {self.customerNo} food will be ready in: {self.remainingPrepTime:.3f} more min')
             yield self.env.timeout(self.remainingPrepTime)
-            print(f'Customer {self.customerNo} food is ready at: {self.env.now:.3f}')
-        else:
-            print(f'Customer {self.customerNo} food was ready: {-1 * self.remainingPrepTime:.3f} min ago')
         #payment
         self.timeOfPayment = self.env.now
         yield self.env.timeout(self.timeToPay)
         yield self.pickupWindow.release(getToPickupWindow)
-        print(f'Customer {self.customerNo} finished paying and left at: {self.env.now:.3f}')
         self.timeCustomerLeft = self.env.now
         self.totalDriveThruTime = self.timeCustomerLeft - self.timeOfArrival
         totalTimeTakenList.append(self.totalDriveThruTime)
@@ -148,8 +131,6 @@ for replicate in range(1):
     averageLostCustomers.append(np.sum(lostCustomerList))
     averageCustomersProcessed.append(np.sum(noCustomersProccessedList)-np.sum(lostCustomerList))
     
-#print(averageTotalTimeTaken)
-#print(averageLostCustomers)
 print(f'The mean interarrival time of customers is: {meanInterArrivalTime}')
 print(f'The drive-thru simulation ran for 120 time units, to simulate the lunch rush from 11:00am to 1:00pm.')
 print(
