@@ -117,7 +117,7 @@ meanInterArrivalTime = 2.0
 averageTotalTimeTaken = []
 averageLostCustomers = []
 averageCustomersProcessed = []
-runs = 1000
+runs = 100
 for replicate in range(runs):
     totalTimeTakenList = []
     lostCustomerList = []
@@ -131,10 +131,17 @@ for replicate in range(runs):
     averageTotalTimeTaken.append(np.average(totalTimeTakenList))
     averageLostCustomers.append(np.sum(lostCustomerList))
     averageCustomersProcessed.append(np.sum(noCustomersProccessedList)-np.sum(lostCustomerList))
-    
+
+print('Customers processed:')
+print(averageCustomersProcessed)
+print('Average time taken:')
+print(averageTotalTimeTaken)
+print('Customers Lost each run:')
+print(averageLostCustomers) 
+
 print(f'The mean interarrival time of customers is: {meanInterArrivalTime}')
 print(f'The drive-thru simulation ran {runs} times for 120 time units, to simulate the lunch rush from 11:00am to 1:00pm.')
-print(f'The average number of customers processed in 120 time units over {runs} runs is {np.average(averageCustomersProcessed):0.3f} or {np.average(averageCustomersProcessed) / 2:0.3f}')
+print(f'The average number of customers processed in 120 time units over {runs} runs is {np.average(averageCustomersProcessed):0.3f} or {np.average(averageCustomersProcessed) / 2:0.3f} customers/hour')
 print(f'The average total time taken over {runs} runs is {np.average(averageTotalTimeTaken):0.3f}')
 print(f'The average number of customers to bawk over {runs} runs is {np.average(averageLostCustomers):0.3f}')
 
