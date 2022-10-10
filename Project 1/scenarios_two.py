@@ -84,44 +84,28 @@ class Customer:
         #get to order station
         getToOrderStation = self.orderStations[self.lineNo].request() #get in line for orderstation
         yield getInOrderLine
-        #print(f'Customer {self.customerNo} got in line {self.lineNo} at: {self.env.now:.3f}')
-        #print(f'  Length of Order Station {self.lineNo} Queue: {len(self.orderStations[self.lineNo].queue)}')
         yield getToOrderStation
-        #print(f'Customer {self.customerNo} got to ORDERSTATION {self.lineNo} at: {self.env.now:.3f}')
         yield self.env.timeout(self.timeToOrder)
         self.timeOfOrder = self.env.now
-        #print(f'Customer {self.customerNo} ordered food at: {self.env.now:.3f}')
         self.timeOfFoodReady = self.timeOfOrder + self.timeToPrepFood
-        #print(f'Customer {self.customerNo} food will be ready at {self.timeOfFoodReady:.3f}')
         self.timeOfPayment = self.env.now
         yield self.env.timeout(self.timeToPay)
-        #print(f'Customer {self.customerNo} paid for their food at: {self.env.now:.3f}')
         yield self.orderStations[self.lineNo].release(getToOrderStation) #after paying for food release the order station
         #get in pickup line
         self.peopleInPickupLineAfterOrdering = self.pickupLine.count
         self.peopleWaitingForPickupLine = len(self.pickupLine.queue)
         getInPickupLine = self.pickupLine.request()
-        #print(f'Customer {self.customerNo} is waiting for the pickup line at: {self.env.now:.3f}')
-        #print(f'  Number of people already in the pickup line: {self.peopleInPickupLineAfterOrdering}')
-        #print(f'  Number of people waiting for pickup line: {len(self.pickupLine.queue)}')
         yield getInPickupLine
         yield self.line[self.lineNo].release(getInOrderLine) #once there is space in the pickup line, leave the order line
-        #print(f'Customer {self.customerNo} got in the pickup line at: {self.env.now:.3f}')
         #get to pickup window then wait for food to finish
         getToPickupWindow = self.pickupWindow.request()
         yield getToPickupWindow
         yield self.pickupLine.release(getInPickupLine) #once there is space at the checkout window, leave the pickup line
-        #print(f'Customer {self.customerNo} got out of the pickup line and to the window at: {self.env.now:.3f}')
         self.remainingPrepTime = self.timeToPrepFood-(self.env.now - self.timeOfOrder)
         if self.remainingPrepTime > 0.0:
-            #print(f'Customer {self.customerNo} food will be ready in: {self.remainingPrepTime:.3f} more min')
             yield self.env.timeout(self.remainingPrepTime)
-            #print(f'Customer {self.customerNo} food is ready at: {self.env.now:.3f}')
-        #else:
-            #print(f'Customer {self.customerNo} food was ready: {-1 * self.remainingPrepTime:.3f} min ago')
         #payment
         yield self.pickupWindow.release(getToPickupWindow)
-        #print(f'Customer {self.customerNo} picked up food and left at: {self.env.now:.3f}')
         self.timeCustomerLeft = self.env.now
         self.totalDriveThruTime = self.timeCustomerLeft - self.timeOfArrival
         totalTimeTakenList.append(self.totalDriveThruTime)
@@ -141,7 +125,8 @@ meanInterArrivalTime = 2.0
 averageTotalTimeTaken = []
 averageLostCustomers = []
 averageCustomersProcessed = []
-for replicate in range(10000):
+runs = 1000
+for replicate in range(runs):
     totalTimeTakenList = []
     lostCustomerList = []
     noCustomersProccessedList = []
@@ -156,19 +141,20 @@ for replicate in range(10000):
     averageLostCustomers.append(np.sum(lostCustomerList))
     averageCustomersProcessed.append(np.sum(noCustomersProccessedList)-np.sum(lostCustomerList))
 
-#print(averageTotalTimeTaken)
-#print(averageLostCustomers)
 print(f'The mean interarrival time of customers is: {meanInterArrivalTime}')
-print(f'The drive-thru simulation ran for 120 time units, to simulate the lunch rush from 11:00am to 1:00pm.')
-print(f'The average number of customers processed in 120 time units over 10000 runs is {np.average(averageCustomersProcessed):0.3f}')
-print(f'The average total time taken over 10000 runs is {np.average(averageTotalTimeTaken):0.3f}')
-print(f'The average number of customers to bawk over 10000 runs is {np.average(averageLostCustomers):0.3f}')
-
+print(f'The drive-thru simulation ran {runs} times for 120 time units, to simulate the lunch rush from 11:00am to 1:00pm.')
+print(f'The average number of customers processed in 120 time units over {runs} runs is {np.average(averageCustomersProcessed):0.3f} or {np.average(averageCustomersProcessed) / 2:0.3f} customers/hour')
+print(f'The average total time taken over {runs} runs is {np.average(averageTotalTimeTaken):0.3f}')
+print(f'The average number of customers to bawk over {runs} runs is {np.average(averageLostCustomers):0.3f}')
+deviations = [(x - np.average(averageLostCustomers))
+              ** 2 for x in averageLostCustomers]
+varianceOfCustomersLost = sum(deviations) / runs
+print(f'The variance of customers lost is {varianceOfCustomersLost:0.3f}')
 plt.figure()
-plt.hist(averageLostCustomers)
+plt.hist(averageLostCustomers, bins = 20)
 plt.xlabel('average number of customers lost')
 plt.ylabel('frequency')
-plt.title('Customers Lost over 100 Runs')
+plt.title(f'Customers Lost Over {runs} Runs')
 plt.show()
 
 # %%
