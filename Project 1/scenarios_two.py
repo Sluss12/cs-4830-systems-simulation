@@ -63,7 +63,6 @@ class Customer:
     
     def inLine(self):
         self.timeOfArrival = self.env.now
-        #print(f'Customer {self.customerNo} has arrived at: {self.env.now:.3f}')
         #check if line is full
         if (len(self.line[0].queue) + len(self.line[1].queue)) >= 12:
             #print(f'Customer {self.customerNo} HAS BAWKED ON ARRIVAL at simTime {self.env.now:.3f}')
@@ -142,10 +141,12 @@ for replicate in range(runs):
     averageCustomersProcessed.append(np.sum(noCustomersProccessedList)-np.sum(lostCustomerList))
 
 print(f'The mean interarrival time of customers is: {meanInterArrivalTime}')
-print(f'The drive-thru simulation ran {runs} times for 120 time units, to simulate the lunch rush from 11:00am to 1:00pm.')
-print(f'The average number of customers processed in 120 time units over {runs} runs is {np.average(averageCustomersProcessed):0.3f} or {np.average(averageCustomersProcessed) / 2:0.3f} customers/hour')
-print(f'The average total time taken over {runs} runs is {np.average(averageTotalTimeTaken):0.3f}')
-print(f'The average number of customers to bawk over {runs} runs is {np.average(averageLostCustomers):0.3f}')
+print(
+    f'The average number of customers processed is {np.average(averageCustomersProcessed):0.3f} or {np.average(averageCustomersProcessed) / 2:0.3f} customers/hour')
+print(
+    f'The average total time in the drive-thru is {np.average(averageTotalTimeTaken):0.3f} minutes')
+print(
+    f'The average number of customers to bawk over {runs} runs is {np.average(averageLostCustomers):0.3f}')
 deviations = [(x - np.average(averageLostCustomers))
               ** 2 for x in averageLostCustomers]
 varianceOfCustomersLost = sum(deviations) / runs
