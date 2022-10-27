@@ -37,7 +37,7 @@ class Customer:
 
     def orderProcess(self):
         self.timeOfArrival = self.env.now
-        print(f'Customer {self.customerNo} has arrived at {self.env.now:.2}.')
+        print(f'Customer {self.customerNo} has arrived at {self.env.now:.2f}.')
         # check if line is full
         maxLineSize = 8
         if len(self.orderStationLine.queue) >= maxLineSize: # Max cars waiting for order station is 8
@@ -46,6 +46,7 @@ class Customer:
         # get in line
         getInOrderStationLine = self.orderStationLine.request()
         yield getInOrderStationLine # at the front of order line
+        print(f'Customer {self.customerNo} got to front of order station line at {self.env.now:.2f}.')
         # pick order station
         if self.orderStation[0].count < self.orderStation[0].capacity: # station 0 empty
             self.orderStationNo = 0
@@ -55,41 +56,46 @@ class Customer:
             self.orderStationNo = 0
         else:
             self.orderStationNo = 1
-        requestOrderStation = self.orderStation[self.orderStationNo].request() # get in line for specific orderstation
-        # get to order station
+        # order station
+        requestOrderStation = self.orderStation[self.orderStationNo].request() # wait for specific orderstation
         yield requestOrderStation
-        print(f'Customer {self.customerNo} got to order station {self.orderStationNo} at {self.env.now:.2}.')
-        yield self.orderStationLine.release(getInOrderStationLine)
+        print(f'Customer {self.customerNo} got to order station {self.orderStationNo} at {self.env.now:.2f}.')
+        yield self.orderStationLine.release(getInOrderStationLine) # out of line, at order station
         self.timeOfOrder = self.env.now
         yield self.env.timeout(self.timeToOrder)
-        print(f'Customer {self.customerNo} finished at order station {self.orderStationNo} at {self.env.now:.2}.')
-        # get in payment line
-        getInPaymentLine = self.paymentLine.request()
+        print(f'Customer {self.customerNo} finished at order station {self.orderStationNo} at {self.env.now:.2f}.')
+        # payment line
+        getInPaymentLine = self.paymentLine.request() # wait for payment line
         yield getInPaymentLine
-        yield self.orderStation[self.orderStationNo].release(requestOrderStation)
+        print(f'Customer {self.customerNo} got in payment line at {self.env.now:.2f}.')
+        yield self.orderStation[self.orderStationNo].release(requestOrderStation) # out of order station, in line
         # payment window
-        requestPaymentWindow = self.paymentWindow.request()
+        requestPaymentWindow = self.paymentWindow.request() # wait for payment window
         yield requestPaymentWindow
-        print(f'Customer {self.customerNo} got to payment window at {self.env.now:.2}.')
-        yield self.paymentLine.release(getInPaymentLine)
+        print(f'Customer {self.customerNo} got to payment window at {self.env.now:.2f}.')
+        yield self.paymentLine.release(getInPaymentLine) # out of line, at payment window
         self.timeOfPayment = self.env.now
         yield self.env.timeout(self.timeToPay)
         # pickup line
-        getInPickupLine = self.pickupLine.request()
+        getInPickupLine = self.pickupLine.request() # wait for pickup line
         yield getInPickupLine
-        yield self.paymentWindow.release(requestPaymentWindow)
+        print(f'Customer {self.customerNo} got in pickup line at {self.env.now:.2f}.')
+        yield self.paymentWindow.release(requestPaymentWindow) # out of payment window, in line
         # pickup window
-        requestPickWindow = self.pickupWindow.request()
+        requestPickWindow = self.pickupWindow.request() # wait for pickup window
         yield requestPickWindow
-        yield self.pickupLine.release(getInPickupLine)
+        yield self.pickupLine.release(getInPickupLine) # out of line, at pickup window
         self.timeOfPickup = self.env.now
-        print(f'Customer {self.customerNo} got to pickup window at {self.env.now:.2}.')
+        print(f'Customer {self.customerNo} got to pickup window at {self.env.now:.2f}.')
         yield self.env.timeout(self.timeToPickup)
+        yield self.pickupWindow.release(requestPickWindow) # customer finished, now leaving
+        print(f'Customer {self.customerNo} left at {self.env.now:.2f}.')
+
 
 def customerGenerator(resources):
     customerNo = 1
     while True:
-        interarrivalRate = 0.5 #time delay between cust
+        interarrivalRate = 1.0 #time delay between cust
         yield resources.env.timeout(interarrivalRate)
         customer = Customer(customerNo, resources)
         resources.env.process(customer.orderProcess())
@@ -116,7 +122,7 @@ for replicate in range(runs):
     noCustomersProccessedList = []
     resources = simResources()
     resources.env.process(customerGenerator(resources))
-    resources.env.run(until=120.0)
+    resources.env.run(until=30.0)
     averageTotalTimeTaken.append(np.average(totalTimeTakenList))
     averageLostCustomers.append(np.sum(lostCustomerList))
     averageCustomersProcessed.append(np.sum(noCustomersProccessedList)-np.sum(lostCustomerList))
