@@ -13,14 +13,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class Customer:
-    def __init__(self, env, number,orderStationLine, orderStations, pickupLine, pickupWindow):
-        self.env = env
-        self.customerNo = number
-        self.orderStationLine = orderStationLine
-        self.orderStations = orderStations
+    def __init__(self, customerNo, resources):
+        self.env = resources.env
+        self.customerNo = customerNo
+        self.orderStationLine = resources.orderStationLine
+        self.orderStation = resources.orderStation
         self.orderStationNo = -1
-        self.pickupLine = pickupLine
-        self.pickupWindow = pickupWindow
+        self.paymentLine = resources.paymentLine
+        self.paymentWindow = resources.paymentWindow
+        self.pickupLine = resources.pickupLine
+        self.pickupWindow = resources.pickupWindow
         self.timeToOrder = 5.0
         self.timeToPay = 3.0
         self.timeToPickup = 2.0
@@ -35,57 +37,86 @@ class Customer:
 
     def orderProcess(self):
         self.timeOfArrival = self.env.now
+        print(f'Customer {self.customerNo} has arrived at {self.env.now:.2}.')
         # check if line is full
-        if len(self.orderStationLine.queue) >= 8: # Max cars waiting for order station is 8
+        maxLineSize = 8
+        if len(self.orderStationLine.queue) >= maxLineSize: # Max cars waiting for order station is 8
             lostCustomerList.append(1.0)
             return # Bawk
         # get in line
         getInOrderStationLine = self.orderStationLine.request()
         yield getInOrderStationLine # at the front of order line
         # pick order station
-        if self.orderStations[0].count < self.orderStations[0].capacity:
+        if self.orderStation[0].count < self.orderStation[0].capacity: # station 0 empty
             self.orderStationNo = 0
-        elif self.orderStations[1].count < self.orderStations[1].capacity:
+        elif self.orderStation[1].count < self.orderStation[1].capacity: # station 1 empty
             self.orderStationNo = 1
-        elif len(self.orderStations)
-        getToOrderStation = self.orderStations[self.orderStationNo].request() # get in line for specific orderstation
+        elif len(self.orderStation[0].queue) < len(self.orderStation[1].queue): #neither station is empty, pick the shortest queue
+            self.orderStationNo = 0
+        else:
+            self.orderStationNo = 1
+        requestOrderStation = self.orderStation[self.orderStationNo].request() # get in line for specific orderstation
         # get to order station
-        
+        yield requestOrderStation
+        print(f'Customer {self.customerNo} got to order station {self.orderStationNo} at {self.env.now:.2}.')
+        yield self.orderStationLine.release(getInOrderStationLine)
+        self.timeOfOrder = self.env.now
+        yield self.env.timeout(self.timeToOrder)
+        print(f'Customer {self.customerNo} finished at order station {self.orderStationNo} at {self.env.now:.2}.')
         # get in payment line
-        
+        getInPaymentLine = self.paymentLine.request()
+        yield getInPaymentLine
+        yield self.orderStation[self.orderStationNo].release(requestOrderStation)
         # payment window
-        
+        requestPaymentWindow = self.paymentWindow.request()
+        yield requestPaymentWindow
+        print(f'Customer {self.customerNo} got to payment window at {self.env.now:.2}.')
+        yield self.paymentLine.release(getInPaymentLine)
+        self.timeOfPayment = self.env.now
+        yield self.env.timeout(self.timeToPay)
         # pickup line
-        
+        getInPickupLine = self.pickupLine.request()
+        yield getInPickupLine
+        yield self.paymentWindow.release(requestPaymentWindow)
         # pickup window
-        
+        requestPickWindow = self.pickupWindow.request()
+        yield requestPickWindow
+        yield self.pickupLine.release(getInPickupLine)
+        self.timeOfPickup = self.env.now
+        print(f'Customer {self.customerNo} got to pickup window at {self.env.now:.2}.')
+        yield self.env.timeout(self.timeToPickup)
 
-def customerGenerator(env, orderStations, pickupLine, pickupWindow):
+def customerGenerator(resources):
     customerNo = 1
     while True:
         interarrivalRate = 0.5 #time delay between cust
-        yield env.timeout(interarrivalRate)  
-        customer = Customer(env, customerNo, orderStationLine, orderStations, pickupLine, pickupWindow)
-        env.process(customer.orderProcess())
+        yield resources.env.timeout(interarrivalRate)
+        customer = Customer(customerNo, resources)
+        resources.env.process(customer.orderProcess())
         customerNo += 1
         noCustomersProccessedList.append(1.0)
 
+class simResources:
+    def __init__(self,):
+        self.env = simpy.Environment()
+        self.orderStationLine = simpy.Resource(self.env, capacity=1)
+        self.orderStation = [simpy.Resource(self.env, capacity=1), simpy.Resource(self.env, capacity=1)]
+        self.paymentLine = simpy.Resource(self.env, capacity=4)
+        self.paymentWindow = simpy.Resource(self.env, capacity=1)
+        self.pickupLine = simpy.Resource(self.env, capacity=1)
+        self.pickupWindow = simpy.Resource(self.env, capacity=1)
 
 averageTotalTimeTaken = []
 averageLostCustomers = []
 averageCustomersProcessed = []
-runs = 1000
+runs = 1
 for replicate in range(runs):
     totalTimeTakenList = []
     lostCustomerList = []
     noCustomersProccessedList = []
-    env = simpy.Environment()
-    orderStationLine = simpy.Resource(env, capacity=1)
-    orderStations = [simpy.Resource(env, capacity=1), simpy.Resource(env, capacity=1)]
-    pickupLine = simpy.Resource(env, capacity=6)
-    pickupWindow = simpy.Resource(env, capacity=1)
-    env.process(customerGenerator(env,orderStations,pickupLine,pickupWindow))
-    env.run(until=120.0) 
+    resources = simResources()
+    resources.env.process(customerGenerator(resources))
+    resources.env.run(until=120.0)
     averageTotalTimeTaken.append(np.average(totalTimeTakenList))
     averageLostCustomers.append(np.sum(lostCustomerList))
     averageCustomersProcessed.append(np.sum(noCustomersProccessedList)-np.sum(lostCustomerList))
