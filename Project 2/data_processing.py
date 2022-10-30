@@ -18,28 +18,31 @@ dirList = os.listdir(DATA_PATH)
 
 print(dirList)
 
-def importData(files_path=DATA_PATH):
-    arrival = import_arrival(files_path)
-    order = import_order(files_path)
-    payment = import_payment(files_path)
-    pickup = import_pickup(files_path)
+interarrivalTimes = []
 
-def import_arrival(files_path):
-    fileCounter = 1
-    while(True):
-        fileNo = str(fileCounter).zfill(2)
-        arrivals_path = os.path.join(files_path, "arrival.xlsx")
+for file in dirList:
+    fileParts = file.split('.')
+    
+    nameWithNo = fileParts[0]
+    ext = fileParts[1]
+    nameParts = nameWithNo.split('_')
+    name = nameParts[0]
+    fileNo = nameParts[1]
+    
+    fullFileName = DATA_PATH + r"\\" + file
+    
+    if name.find('arrival') == 0:
+        if ext == 'xlsx':
+            tbl = pd.read_excel(fullFileName)
+            tbl['Arrivals'] = pd.to_datetime(tbl['Arrivals'], format="%I:%M:%S")
+        elif ext == 'csv':
+            tbl = pd.read_csv(fullFileName)
+            tbl['Arrivals'] = pd.to_datetime(tbl['Arrivals'])
 
-    return pd.read_csv(arrivals_path)
+        tbl['delta'] = (tbl['Arrivals']-tbl['Arrivals'].shift()).fillna(pd.Timedelta(0))     
+        tbl['elapsedTime'] = tbl['delta'].apply(lambda x: x  / np.timedelta64(1,'s')).astype('int64') % (24*60)
+        print(tbl)
 
-def import_order(files_path):
-    order_path = os.path.join(files_path, "order.csv")
-    return pd.read_csv(order_path)
-
-def import_payment(files_path):
-    payment_path = os.path.join(files_path, "payment.csv")
-    return pd.read_csv(payment_path)
-
-def import_pickup(files_path):
-    pickup_path = os.path.join(files_path, "pickup.csv")
-    return pd.read_csv(pickup_path)
+        interarrivalTimes += tbl['elapsedTime'].to_list()
+        
+sampleData = interarrivalTimes
