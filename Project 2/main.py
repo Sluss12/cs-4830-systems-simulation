@@ -4,6 +4,7 @@
 @project: 2
 @description: For our second project, we will study how to model and simulate input distributions. Since we have simple queuing simulation experience, we will use the McDonald’s restaurant across the street from Wright State as our source of data.
 @file_name: main.py
+@file_description: main.py is the main driver for the simulation which makes all simulation calls, and contains the logical pertaining to the process and order of simulation events. main.py also handles analysis of the simulation results.
 """
 #%% cell to view graphs
 
