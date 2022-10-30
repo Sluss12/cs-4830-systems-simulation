@@ -1,0 +1,15 @@
+Date:	10-11-22
+
+Payment and Pickup Times:
+Start Time:	11:36:10
+End Time:	12:06:51
+
+Arrival and Order Times:
+Start Time:	12:28:32
+End Time:	12:59:22
+
+The system consisted of two order stations, which merged to one line for payment at one window and pickup at the next.
+Arrival time was based on arrival in an actual order line. 
+Order time was based on hearing the greeting and seeing the order completion screen.
+Payment time was based on window opening and customer receiving their card / cash back or car movement when view was obstructed.
+Pickup time was based on arrival at pickup window and customer leaving window.

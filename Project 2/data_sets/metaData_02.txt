@@ -1,0 +1,10 @@
+on 10/12/2022
+Arrival Times- 11:51am-12:22pm
+Order Times- 11:51am-12:22pm
+Payment Times- 12:30pm-1:00pm
+Pickup Times- 12:30pm-1:00pm
+
+For arrival times, time was noted when cars would come to a stop in line- whether that be in front of the ordering station or in line to order.
+For ordering, payment, and pickup, time was measured between wheels stopping by observing when vehicles stopping moving in front of a station and to when they began to drive past the station.
+
+Instant or near-instant stops were still recorded. I.e. If cars were able to quickly pull through payment due to using prepayment with the mobile app, or if pickup was extremely quick for just a drink and wheels didn't stop turning.

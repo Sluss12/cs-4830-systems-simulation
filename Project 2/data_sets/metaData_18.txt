@@ -1,0 +1,3 @@
+Date the data was collected: 10/10/2022
+Time the data was collected: start time 11:30:00
+                             end time   12:00:00

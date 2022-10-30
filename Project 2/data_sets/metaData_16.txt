@@ -1,0 +1,20 @@
+
+-------------------------------------------------------------------------------
+
+The data was collected on 10/07/2022.
+
+-------------------------------------------------------------------------------
+
+The time that took for the data to be collected:-
+
+Start time:-12:19:00 PM
+End time:-1:10:00 PM
+
+-------------------------------------------------------------------------------
+
+-> cars are dividing into the order stations depend on the availability of the order stations.
+-> Some people are taking more time to order the food because of the quantity of the food that they are ordering and choosing from the displayed menu.
+-> Most of the cars goes to payment station in First come First serve basis after odering the food.
+-> Most cars have taken less time in the payment station.
+-> Because of the more quantity of the order, at the pickup station the staff are asking the people to wait on the curbside to save time for the other people.
+-> we have observed that the if one's order is taking time than usual, then the staff are directing them to the curbside parking to wait over there to save time.

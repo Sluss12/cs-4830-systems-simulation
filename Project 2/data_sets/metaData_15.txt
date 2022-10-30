@@ -1,0 +1,16 @@
+Data collected on:10/08/2022
+Data collected at:12:30-1:00
+
+Notes:
+
+1.In the arrival queue there are no overflows(there are no exits due to overflow in my observation).
+2.There is only one entry point for the arrival and then splits into two at the ordering station.
+3.Three(3) cars can exactly fit in between order stations and payment window.
+4.In my observation there is no space for cars in between payment and pickup window.
+5.There are one or two cars waiting at the ordering staion after completing the order to join in the payment queue. 
+6.In my observation it takes some time for customer to get in immediately to order station.
+
+example:
+moving from ordering stations --> last in the payment window (~4 sec) 
+moving to the first in queue --> payment window (~4 sec)
+moving from payment window --> pickup window (~4 sec) 

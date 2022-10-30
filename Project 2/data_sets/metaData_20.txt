@@ -1,0 +1,30 @@
+Date the data was collected:
+  
+	-> The Data Was Collected on 10/06/2022.
+
+
+
+
+Time the data was collected:
+
+	-> Start Time:- 12:20:01 PM
+	-> End Time:- 1:05:28 PM
+
+
+
+
+Additional notes:
+
+-> We measured Arrival time as the exact time the vehicle was entered.
+-> Later,The time taken for a person to order food in order station was measured as Order Start time and Stop time.
+-> We measured that the Payment Start time and Stop time for the complete transaction at the Payment window.
+->Finally,We considered the Pick up Start time and Stop time to collect the food at the Pick up window. 
+
+1. All Cars are arriving and dividing into 2 Ordering satations based on less queue priority.
+2. We have observed that in some cases the type of food which was order by customer will not be available which makes them to exit.
+3. One of the transaction problem we noticed is the credit/debit card issue error and customers will may use cash if they have any.
+4. The Collection of data may be vary based on the flow of customers and the parts of the day like morning,afternoon etc;  
+
+
+
+ 

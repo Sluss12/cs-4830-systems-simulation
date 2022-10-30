@@ -1,0 +1,15 @@
+Collected: 10/13/2022
+Collection Time:
+Arrival & Order: 11 am - 11:30 am
+Payment & Pickup: 11:45 am - 12:15 pm
+
+Arrival was measured when the vehicle got on the parking lot, those that got on the drive-thru lane were kept,
+those who never got on the lane, or left before reaching the order station were not included.
+Order time was collected by listening for the inital speaker spike, which I used to indicate that the order was being taken.
+I assumed they had completed the order once the car began visibly moving.
+There was only 1 available order station once I began collecting data, but approximately 7 minutes in at 11:07, they removed the cones off the second station.
+Payment time began once the window was opened, and end time was collected when the window was closed for the second time or once the car drove off, whichever came first.
+The fastest payment method was exact cash without collecting the receipt, these took as low as a second.
+The pickup time started once the car arrived at the window, as it could be assumed that the if the order was ready it would be handed to the driver immediately.
+The pickup was complete once the window was shut, or the car drove off, whichever came first.
+During the pickup data collection, despite a couple orders taking over a minute, not a single customer had driven up to free up the space for someone else to pick up their order.

@@ -1,0 +1,17 @@
+Wednesday October 12, 2022
+11:22:00 - 01:00:00
+Additional Notes:
+Sub-times of collection
+Arrival Time Data Collected During: 11:22:00 - 11:52:00
+Order Time Data Collected During: 11:50:00 - 12:20:00
+Payment Time Data Collected During: 12:30:00 - 01:00:00
+Pickup Time Data Collected During: 12:30:00 - 01:00:00
+Arrival time was determined by the time at which the customer's vehicle entered the parking lot and got into line instead of parking or 
+turning around the building.
+For the purpose of staying consistent the start times for order, payment, and pickup were determined by the time at which the customer's 
+vehicle window was within reach of the station. Meaning for the order station, when the customer was approximately next to the order speaker. 
+For the payment and pickup, when the customer was within an arms length of the windows.  
+Order stop times were determined by either the "drop up and down" of the order total screen or the vehicle inching (or pulling) forward - whichever 
+occurred first. 
+Payment window stop times were determined by the receipt being handed off to the customer and their arm being pulled back from the payment window. 
+Pickup station stop times were determined by the customer driving forward to exit the parking lot.

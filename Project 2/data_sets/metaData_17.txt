@@ -1,0 +1,9 @@
+﻿Dates the data was collected:
+        10/4/22        11:00-11:30
+        10/6/22        1:00-1:32
+        10/7/22        11:00-11:30
+        10/11/22        12:00-12:40
+        10/12/22        1:00-1:30
+I am collecting the data with 7 columns they are restaurant arrival, order station arrival, 
+order station taken, payment station arrival, payment taken, pickup station arrival and pickup
+station taken.

@@ -1,0 +1,16 @@
+Date data collection - 10/13/2022
+Time - 11:33:00 AM - 12:15:05 PM
+
+
+Notes:
+	1. There is an average of 2 arrivals for less than 2 minutes.
+	2. There is overflow in the arrival queue at the beginning of the observation.
+	3. There is single queue for arrivals and later it is been split into two order queues for ordering stations.
+	4. There is space for around 4 cars between ordering station and payment window.
+	5. Both payment and pickup queues are being engaged in FIFO pattern without any interruptions.
+	6. The time taken to move from one station to another
+		a. from arrival to order -> ~15 seconds on avg
+		b. time to process an order -> on an average 3min and there was one anamoly of order window of 8min
+		c. time to process payment -> ~30 seconds on avg
+		d. time to pick up order -> ~1:30 min on avg
+		

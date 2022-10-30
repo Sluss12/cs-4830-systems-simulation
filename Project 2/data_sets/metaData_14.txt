@@ -1,0 +1,8 @@
+Date the data was collected
+10/05/2022
+
+Time the data was collected (start time-end time)
+12:30 to 12:59
+
+Additional Notes:
+We observed and collected arrival, order, payment, and pickup data for a single 30-minute interval.

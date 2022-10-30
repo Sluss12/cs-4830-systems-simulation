@@ -1,0 +1,28 @@
+Date the data was collected: 10/10/2022
+Time the data was collected for arrival and order: 11:00:15 to 11:30:15
+Time the data was collected for payment and pickup: 11:36:45 to 12:06:45
+
+Notes on how I collected data: I collected data in two thirty minute sections. The arrival time was when a car 
+pulled into the drive-through line. Order station start was when they pulled up to the order station, and order 
+station end was when they started driving to the pickup window (it was not backed up so much between 11 and 
+11:30 that a car finished ordering and was stuck at the order station). Pickup start was when a car pulled up 
+to the pickup window, and pickup end was when the window to hand them food closed or when the car drove forward 
+(whatever was visible or sooner). Payment start was when a car pulled up to the payment window, and payment end 
+was when the car started driving away.
+
+I typed my data points out on my laptop and based the time things happened on the absolute time that was 
+streaming on my phone. 
+
+Anomoly One: One of the order stations was closed (cones in front of it), so I only observed the data of the 
+one order station that was operating. 
+
+Anomoly Two: The final car at the pick-up window was there for an unusually long time, so I have one more data 
+point for payments over pick-ups (since the time slot ended right when the car at the pick-up window was done, 
+and the last car's data at the payment window could not collect their order at the pick-up window in the time 
+slot). 
+
+Miscellaneous: The only issue I ran into while collecting data were certain very fast moments during the 
+11:36:45 to 12:06:45 time slot that were hard to keep up with (collecting data when a car moves to / leaves 
+from the pick-up window at the same time as a car moving to / leaving from the payment window). Some of 
+these points may be seconds off due to the speed of things. I still think the data points are all useful, 
+but wanted to be transparent about this particular difficuly (this happened two times during this slot).

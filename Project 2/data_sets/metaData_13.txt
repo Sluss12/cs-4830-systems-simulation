@@ -1,0 +1,16 @@
+Arrival: 10/4/22 11:30-11:54
+Order:   10/4/22 11:30-12:00
+Payment: 10/4/22 12:20-12:50
+Pickup:  10/4/22 12:20-12:50
+
+I tracked arrival and order times from the same spot. For some reason they
+closed one of their two order stations, and the order line started backing up.
+I had to stop tracking arrival times after only 24 minutes because I couldn't
+reliably see the end of the line. I also didn't get every order, but I figured
+that was okay because we are just trying to get the distribution of order
+lengths.
+
+I tracked payments and pickups from the same spot. I would track the start/stop
+time for a car to pay, and then the same car picking up their order. Then I
+would track the next car to arrive to the payment window. This meant I didn't
+track every single car that came through, but I got at least half of them.

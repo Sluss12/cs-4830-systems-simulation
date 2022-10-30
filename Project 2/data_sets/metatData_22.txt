@@ -1,0 +1,15 @@
+Date of data collection: 10/08/2022
+Time of data collection: 12:00 PM - 12:30 PM
+
+Notes:
+
+1. There were no overflows at the arrival queue ( 0 exits due to overflow )
+2. There is only one queue for the arrived cars and later split into 2 at the ordering stations
+3. There is exactly space for 3 cars between ordering stations and the payment window
+4. According to the observations there is space for 0 cars between payment and pickup
+5. There was also another keen observation about time taken to move from a particular state to the next one 
+	e.g moving from ordering stations --> last in the payment queue (~5 sec)
+	    moving from the first in queue --> payment window (~5 sec)
+	    moving from payment window --> pickup window (~5 sec)
+	    arrival --> order station (~5 sec)
+

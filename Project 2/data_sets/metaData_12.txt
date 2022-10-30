@@ -1,0 +1,28 @@
+﻿Wednesday, Oct 5, 2022
+11:25 AM - 12:00 PM
+
+
+Additional notes:
+1. Arrival:
+* Record the time the moment the car officially stayed in the line. In some cases, we must remove the arrival time of the car that was in line but then abruptly left before placing the order.
+
+
+2. Order Station:
+* Record the start time the moment the server and the customer began communicating.
+* Record the stop time the moment that any of the following are observable: 
+   * The order station screen displayed the final cost.
+   * The server said goodbye or thanks. 
+   * The car progressed to the following payment window.
+
+
+3. Pay Station:
+* Record the start time the moment the cashier started to verbally tell the customer the total cost of their order.
+* Record the stop time the moment the customer received the receipt from the cashier.
+
+
+4. Pickup Station:
+* Record the start time the moment the server delivered the food.
+* Record the stop time at the moment that has one or more of the following:
+   * The cashier closed the pickup window
+   * The customer raised the driver-side window of their car
+   * Be certain of this because occasionally customers only moved the car forward but didn’t leave.

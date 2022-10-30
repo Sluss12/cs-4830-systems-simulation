@@ -1,0 +1,8 @@
+Date of data collection: 10/14/2022
+Time of data collection:
+  - Arrival Time: 11:11-11:41
+  - Order Time:11:50-12:20
+  - Pickup Time: 12:24-12:54
+  - Payment Time: 12:24-12:54
+Additional notes on methodology: 
+  So I goofed up my data collection for orders, payment, and pickup. I'm sorry about that, I didn't double check the format which I was supposed to be recording times until I got back home and saw that I collected it wrong. For all three of those datasets the digit before the decimal is the number of minutes, and the trailing digits are the number of seconds spent at each station. That was my mistake for collecting the data wrong with not enough time to go back and collect the correct data. 

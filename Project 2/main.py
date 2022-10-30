@@ -2,15 +2,28 @@
 @author: mSlusser
 @class: CS-4830 Systems Simulation
 @project: 2
-@description: For our second project, we will study how to model and simulate input distributions. Since we have simple queuing simulation experience, we will use the McDonald’s restaurant across the street from Wright State as our source of data. 
+@description: For our second project, we will study how to model and simulate input distributions. Since we have simple queuing simulation experience, we will use the McDonald’s restaurant across the street from Wright State as our source of data.
+@file_name: main.py
 """
 #%% cell to view graphs
 
 # list of resources
+import os
 import simpy
 import random
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+
+class simResources:
+    def __init__(self,):
+        self.env = simpy.Environment()
+        self.orderStationLine = simpy.Resource(self.env, capacity=1)
+        self.orderStation = [simpy.Resource(self.env, capacity=1), simpy.Resource(self.env, capacity=1)]
+        self.paymentLine = simpy.Resource(self.env, capacity=4)
+        self.paymentWindow = simpy.Resource(self.env, capacity=1)
+        self.pickupLine = simpy.Resource(self.env, capacity=1)
+        self.pickupWindow = simpy.Resource(self.env, capacity=1)
 
 class Customer:
     def __init__(self, customerNo, resources):
@@ -91,7 +104,6 @@ class Customer:
         yield self.pickupWindow.release(requestPickWindow) # customer finished, now leaving
         print(f'Customer {self.customerNo} left at {self.env.now:.2f}.')
 
-
 def customerGenerator(resources):
     customerNo = 1
     while True:
@@ -101,16 +113,6 @@ def customerGenerator(resources):
         resources.env.process(customer.orderProcess())
         customerNo += 1
         noCustomersProccessedList.append(1.0)
-
-class simResources:
-    def __init__(self,):
-        self.env = simpy.Environment()
-        self.orderStationLine = simpy.Resource(self.env, capacity=1)
-        self.orderStation = [simpy.Resource(self.env, capacity=1), simpy.Resource(self.env, capacity=1)]
-        self.paymentLine = simpy.Resource(self.env, capacity=4)
-        self.paymentWindow = simpy.Resource(self.env, capacity=1)
-        self.pickupLine = simpy.Resource(self.env, capacity=1)
-        self.pickupWindow = simpy.Resource(self.env, capacity=1)
 
 averageTotalTimeTaken = []
 averageLostCustomers = []

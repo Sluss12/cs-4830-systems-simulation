@@ -1,0 +1,26 @@
+  The data was collected on 2 seperate days.  The payment and pickup data
+were collected on October 12th, 2022 from approximately 11:40 am to 12:10
+pm.  The arrival and order data were collected on October 14th, 2022 from
+approximately 11:00 am to 11:30 am.
+
+
+-------------------------------------------------------------------------
+                                Notes
+-------------------------------------------------------------------------
+
+  For the arrival data, it seemed that cars lined up into 1 line and then
+diverged into the 2 seperate drive thru kiosks. For all the other data,
+as soon as a customer came to a complete stop at the respective station,
+the timer started. Most of the time, as soon as a car started driving away,
+it was assumed that the process was finished and the timer then stopped.
+For a few instances, if the car had another car blocking it and preventing
+it from moving, it was assumed that the process stopped as soon as the car
+window rolled up indicating the end of that particular station service. It
+was noticed that the arrival line never was excessive to where cars waited
+to get in line. Also, there was space for 3 cars between the two order
+stations and the payment station (non-inclusive). There was only space for
+1 car between the payment station and pickup station (non-inclusive). For
+very few instances, a car was asked to pull over to the side to wait for
+the food to keep the line moving. For ease of tracking purposes, in these
+rare cases, the timer was marked as finished as soon as the car moved away 
+from that station.

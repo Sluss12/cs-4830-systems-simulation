@@ -1,0 +1,7 @@
+Data Collected: 10/12/2022
+Time Data Collection Started: 12:00:31 - 13:12:48
+Additional Notes: 
+I saved arrival time for when they pulled into the mcdonalds parking lot
+I started order when they pulled up to order window. 
+I started payment time from the time the customer pulled up to the payment window. 
+I started pickup time from the time the customer finished paying for their food.
