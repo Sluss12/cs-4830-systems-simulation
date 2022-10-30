@@ -16,7 +16,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 class simResources:
-    def __init__(self,):
+    def __init__(self):
         self.env = simpy.Environment()
         self.orderStationLine = simpy.Resource(self.env, capacity=1)
         self.orderStation = [simpy.Resource(self.env, capacity=1), simpy.Resource(self.env, capacity=1)]

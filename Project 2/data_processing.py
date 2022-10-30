@@ -9,40 +9,38 @@
 
 # list of resources
 import os
-import random
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-DATA_PATH=r"D:\School\Year 5 - Semester 1\CS 4830\cs-4830-systems-simulation\Project 2\data_sets"
-dirList = os.listdir(DATA_PATH)
-
+projectDir= os.path.dirname(__file__)
+dataDir = os.path.join(projectDir, 'data_sets')
+dirList = os.listdir(dataDir)
+print(dataDir)
 print(dirList)
 
-interarrivalTimes = []
+def getSampledInterarrivalTimes():
+    interarrivalTimes = []
+    try:
+        for file in dirList:
+            fileParts = file.split('.')
+            name = fileParts[0]
+            ext = fileParts[1]
+            fullFileName = dataDir + r"\\" + file
+            if name.find('arrival') == 0:
+                if ext == 'xlsx':
+                    tbl = pd.read_excel(fullFileName)
+                    tbl['Time'] = pd.to_datetime(tbl['Time'], format="%I:%M:%S")
+                elif ext == 'csv':
+                    tbl = pd.read_csv(fullFileName)
+                    tbl['Time'] = pd.to_datetime(tbl['Time'])
+                tbl['delta'] = (tbl['Time']-tbl['Time'].shift()).fillna(pd.Timedelta(0))
+                tbl['elapsedTime'] = tbl['delta'].apply(lambda x: x  / np.timedelta64(1,'s')).astype('int64') % (24*60)
+                #print(fullFileName)
+                #print(tbl)
+                interarrivalTimes += tbl['elapsedTime'].to_list()
+    except (KeyError, ValueError, AttributeError) as err:
+        print(fullFileName)
+        print(err)
+    sampledInterarrivalSeconds = interarrivalTimes
+    return sampledInterarrivalSeconds
 
-for file in dirList:
-    fileParts = file.split('.')
-    
-    nameWithNo = fileParts[0]
-    ext = fileParts[1]
-    nameParts = nameWithNo.split('_')
-    name = nameParts[0]
-    fileNo = nameParts[1]
-    
-    fullFileName = DATA_PATH + r"\\" + file
-    
-    if name.find('arrival') == 0:
-        if ext == 'xlsx':
-            tbl = pd.read_excel(fullFileName)
-            tbl['Arrivals'] = pd.to_datetime(tbl['Arrivals'], format="%I:%M:%S")
-        elif ext == 'csv':
-            tbl = pd.read_csv(fullFileName)
-            tbl['Arrivals'] = pd.to_datetime(tbl['Arrivals'])
-
-        tbl['delta'] = (tbl['Arrivals']-tbl['Arrivals'].shift()).fillna(pd.Timedelta(0))     
-        tbl['elapsedTime'] = tbl['delta'].apply(lambda x: x  / np.timedelta64(1,'s')).astype('int64') % (24*60)
-        print(tbl)
-
-        interarrivalTimes += tbl['elapsedTime'].to_list()
-        
-sampleData = interarrivalTimes
+print(getSampledInterarrivalTimes())
