@@ -13,8 +13,6 @@ import os
 import simpy
 import random
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import data_processing as dp
 
 class simResources:
@@ -112,10 +110,10 @@ def customerGenerator(resources):
         interarrivalRate = np.float64(dp.generateInterarrivalTime()) #time delay between cust
         yield resources.env.timeout(interarrivalRate)
         customer = Customer(customerNo, resources)
-        print(f'Interarrival Time: {interarrivalRate:0.4f}')
-        print(f'Time to Order: {customer.timeToOrder:0.4f}')
-        print(f'Time to Pay: {customer.timeToPay:0.4f}')
-        print(f'Time to Pickup: {customer.timeToPickup:0.4f}')
+        # print(f'Interarrival Time: {interarrivalRate:0.4f}')
+        # print(f'Time to Order: {customer.timeToOrder:0.4f}')
+        # print(f'Time to Pay: {customer.timeToPay:0.4f}')
+        # print(f'Time to Pickup: {customer.timeToPickup:0.4f}')
         resources.env.process(customer.orderProcess())
         customerNo += 1
         noCustomersProccessedList.append(1.0)
@@ -131,7 +129,9 @@ for replicate in range(runs):
     noCustomersProccessedList = []
     resources = simResources()
     resources.env.process(customerGenerator(resources))
-    resources.env.run(until=30.0)
+    resources.env.run(until=300.0)
     averageTotalTimeTaken.append(np.average(totalTimeTakenList))
     averageLostCustomers.append(np.sum(lostCustomerList))
     averageCustomersProcessed.append(np.sum(noCustomersProccessedList)-np.sum(lostCustomerList))
+
+# %%

@@ -166,25 +166,35 @@ def generateInterarrivalTime():
     sampledInterarrivalTimes = getSampledInterarrivalTimes()
     # distribution appears to be: exponential
     results = dataAnalysis(sampledInterarrivalTimes,"Interarrival", 40, "expo")
-    return results.generateValue()
+    return generateValue(results)
 
 def generateOrderTime():
     sampledOrders = getSampledOrders()
     # distribution appears to be: logNormal
     results = dataAnalysis(sampledOrders,"Order", 35, "logNorm")
-    return results.generateValue()
+    return generateValue(results)
 
 def generatePaymentTime():
     sampledPayments = getSampledPayments()
     # distribution appears to be: logNormal
     results = dataAnalysis(sampledPayments,"Payments", 40, "logNorm")
-    return results.generateValue()
+    return generateValue(results)
 
 def generatePickupTime():
     sampledPickups = getSampledPickups()
     # distribution appears to be: logNorm
     results = dataAnalysis(sampledPickups,"Pickups", 45, "logNorm")
-    return results.generateValue()
+    return generateValue(results)
+
+def generateValue(results):
+    value = 0
+    if results.distribution == "expo":
+        value = stats.expon.rvs(loc=results.loc, scale=results.scale, size=1)
+        return value[0]
+    elif results.distribution == "logNorm":
+        value = stats.lognorm.rvs(s=results.shape, loc=results.loc, scale=results.scale, size=1)
+        return value[0]
+    return TypeError("Incorrect type. Type result required.")
 
 class result:
     def __init__(self, sampleData, descriptor, binEdges, binMidPt, expected, observed,
@@ -238,13 +248,3 @@ def plot(result):
     plt.plot(result.binMidPt, result.expected, 'or-', label=f'Expected\n({result.distribution})')
     plt.plot(result.binMidPt, result.observed, 'oy-', label='Observed')
     plt.legend()
-
-    def generateValue(self):
-        value = 0
-        if self.distribution == "expo":
-            value = stats.expon.rvs(loc=self.loc, scale=self.scale, size=1, random_state=42)
-            return value
-        elif self.distribution == "logNorm":
-            value = stats.lognorm.rvs(s=self.shape, loc=self.loc, scale=self.scale, size=1, random_state=42)
-            return value[0]
-        return TypeError("Incorrect type. Type result required.")
