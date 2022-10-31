@@ -2,7 +2,7 @@
 @author: mSlusser
 @class: CS-4830 Systems Simulation
 @project: 2
-@description: For our second project, we will study how to model and simulate input distributions. Since we have simple queuing simulation experience, we will use the McDonald’s restaurant across the street from Wright State as our source of data.
+@description: For our second project, we will study how to model and simulate input distributions. Since we have simple queuing simulation experience, we will use the McDonalds restaurant across the street from Wright State as our source of data.
 @file_name: main.py
 @file_description: main.py is the main driver for the simulation which makes all simulation calls, and contains the logical pertaining to the process and order of simulation events. main.py also handles analysis of the simulation results.
 """
@@ -15,6 +15,7 @@ import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import data_processing as dp
 
 class simResources:
     def __init__(self):
@@ -37,9 +38,9 @@ class Customer:
         self.paymentWindow = resources.paymentWindow
         self.pickupLine = resources.pickupLine
         self.pickupWindow = resources.pickupWindow
-        self.timeToOrder = 5.0
-        self.timeToPay = 3.0
-        self.timeToPickup = 2.0
+        self.timeToOrder = np.float64(dp.generateOrderTime())
+        self.timeToPay = np.float64(dp.generatePaymentTime())
+        self.timeToPickup = np.float64(dp.generatePickupTime())
         # For Use in Stats
         self.bawk = False
         self.totalDriveThruTime = -1
@@ -108,13 +109,18 @@ class Customer:
 def customerGenerator(resources):
     customerNo = 1
     while True:
-        interarrivalRate = 1.0 #time delay between cust
+        interarrivalRate = np.float64(dp.generateInterarrivalTime()) #time delay between cust
         yield resources.env.timeout(interarrivalRate)
         customer = Customer(customerNo, resources)
+        print(f'Interarrival Time: {interarrivalRate:0.4f}')
+        print(f'Time to Order: {customer.timeToOrder:0.4f}')
+        print(f'Time to Pay: {customer.timeToPay:0.4f}')
+        print(f'Time to Pickup: {customer.timeToPickup:0.4f}')
         resources.env.process(customer.orderProcess())
         customerNo += 1
         noCustomersProccessedList.append(1.0)
 
+#%%
 averageTotalTimeTaken = []
 averageLostCustomers = []
 averageCustomersProcessed = []
