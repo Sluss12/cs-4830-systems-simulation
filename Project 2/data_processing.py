@@ -129,7 +129,6 @@ def getSampledPickups():
     return sampledPickupSeconds
 
 def dataAnalysis(sampleData, descriptor, bins, distribution):
-
     # Observed
     numBins = bins
     sampleSize = np.size(sampleData)
