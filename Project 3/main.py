@@ -10,6 +10,7 @@
 
 # list of resources
 import os
+from tkinter import Y
 import simpy
 import random
 import numpy as np
@@ -36,8 +37,6 @@ class defaultRider:
         self.timeForDoorsToOpenOrClose = 1
         self.timeForElevatorToTravel = 1
         self.elevatorNo = -1
-        self.elevatorStartFloor = -1
-        self.elevatorEndFloor = -1
         self.riderStartFloor = -1
         self.riderEndFloor = -1
         # For Use in Stats
@@ -49,7 +48,13 @@ class defaultRider:
         self.riderStartFloor = self.pickRiderFloor()
         self.riderEndFloor = self.pickDestinationFloor()
         print(f'Rider {self.riderNo} has arrived at {self.env.now:.2f} on floor {self.riderStartFloor}')
-        self.resources.elevators[0].request()
+        self.elevatorNo = self.pickServiceingElevator()
+        elevatorMoving = self.resources.elevators[self.elevatorNo].request()
+        yield elevatorMoving
+        floorDelta = np.absolute(self.resources.elevatorPosition[self.elevatorNo]-self.riderStartFloor)
+        yield resources.env.timeout(self.resources.travelTimes[floorDelta])
+        yield resources.env.timeout(self.timeForDoorsToOpenOrClose)
+        travelDelta = np.absolute(self.riderEndFloor - self.riderStartFloor)
         
 
     def pickServiceingElevator(self):
