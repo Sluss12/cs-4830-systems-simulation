@@ -26,8 +26,9 @@ class elevator(simpy.Resource):
         return np.abs(self.destination-self.position)
     
     def travelTime(self):
-        travelTimes = [0.0, 2.0, 4.0, 6.0, 8.0]
-        return travelTimes[self.travelDelta()]
+        travelTime =random.uniform(9.5, 11.0) * self.travelDelta()
+        print(f'Travel time = {travelTime}')
+        return travelTime
 
 class simResources:
     def __init__(self):
@@ -250,7 +251,8 @@ class oneFourElevator(rider):
 def defaultGenerator(resources):
     riderNo = 1
     while True:
-        interarrivalRate = 30
+        
+        interarrivalRate = random.expovariate(1/meanInterArrivalTime)
         yield resources.env.timeout(interarrivalRate)
         rider = defaultElevator(riderNo, resources)
         resources.env.process(rider.rideElevator())
@@ -261,7 +263,7 @@ def defaultGenerator(resources):
 def idleOneGenerator(resources):
     riderNo = 1
     while True:
-        interarrivalTime = 30
+        interarrivalTime = random.expovariate(1/meanInterArrivalTime)
         yield resources.env.timeout(interarrivalTime)
         rider = idleOneElevator(riderNo, resources)
         resources.env.process(rider.rideElevator())
@@ -272,7 +274,7 @@ def idleOneGenerator(resources):
 def sequenceGenerator(resources):
     riderNo = 1
     while True:
-        interarrivalRate = 30
+        interarrivalRate = random.expovariate(1/meanInterArrivalTime)
         yield resources.env.timeout(interarrivalRate)
         rider = sequenceElevator(riderNo, resources)
         resources.env.process(rider.rideElevator())
@@ -283,7 +285,7 @@ def sequenceGenerator(resources):
 def oneFourGenerator(resources):
     riderNo = 1
     while True:
-        interarrivalRate = 30
+        interarrivalRate = random.expovariate(1/meanInterArrivalTime)
         yield resources.env.timeout(interarrivalRate)
         rider = oneFourElevator(riderNo, resources)
         resources.env.process(rider.rideElevator())
@@ -291,45 +293,15 @@ def oneFourGenerator(resources):
         noRidersProcessedList.append(1.0)
     # end def
 #%%
+meanInterArrivalTime = 25 #seconds
+
 noRidersProcessedList = []
 waitTimeList = []
 resources = simResources()
 resources.env.process(defaultGenerator(resources))
-resources.env.run(until=300.0)
-print(f'Riders Proccessed: {np.sum(noRidersProcessedList):0.0f}')
-print(f'Average Wait Time: {np.average(waitTimeList)}')
-print(f'Wait Times: {waitTimeList}')
-print('\n\n\n\n\n')
-
-#%%
-noRidersProcessedList = []
-waitTimeList = []
-resources = simResources()
-resources.env.process(idleOneGenerator(resources))
-resources.env.run(until=300.0)
-print(f'Riders Proccessed: {np.sum(noRidersProcessedList):0.0f}')
-print(f'Average Wait Time: {np.average(waitTimeList)}')
-print(f'Wait Times: {waitTimeList}')
-print('\n\n\n\n\n')
-
-#%%
-noRidersProcessedList = []
-waitTimeList = []
-resources = simResources()
-resources.env.process(sequenceGenerator(resources))
-resources.env.run(until=300.0)
-print(f'Riders Proccessed: {np.sum(noRidersProcessedList):0.0f}')
-print(f'Average Wait Time: {np.average(waitTimeList)}')
-print(f'Wait Times: {waitTimeList}')
-print('\n\n\n\n\n')
-
-#%%
-noRidersProcessedList = []
-waitTimeList = []
-resources = simResources()
-resources.elevator[1].position=4
-resources.elevator[1].destination=4
-resources.env.process(oneFourGenerator(resources))
+# resources.env.process(idleOneGenerator(resources))
+# resources.env.process(sequenceGenerator(resources))
+# resources.env.process(oneFourGenerator(resources))
 resources.env.run(until=300.0)
 print(f'Riders Proccessed: {np.sum(noRidersProcessedList):0.0f}')
 print(f'Average Wait Time: {np.average(waitTimeList)}')
